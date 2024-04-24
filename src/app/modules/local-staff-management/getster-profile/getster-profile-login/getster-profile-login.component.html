@@ -1,0 +1,727 @@
+<div class="p-1">
+  <!-- table -->
+  <div class="mt-1 ml-1">
+    <div class="w-1/2 lt-xs:w-full lt-md:w-full lt-lg:w-full">
+      <div class="flex flex-row items-center">
+        <div class="w-3/4  primary-title-heading lt-md:w-[60%] lt-xs:ml-1  ">
+          EXISTING GETster PROFILES: </div>
+      </div>
+      <div class="mat-elevation-z8  table-responsive w-full">
+        <div id="existingGetster">
+          <table id="excel_table" matSort mat-table #table [dataSource]="dataSource"
+            class="mat-elevation-z8 component--mat-table__custom-table checklist-table table-bordered table-sm block"
+            style="margin-left: auto; margin-right: auto;">
+            <!-- Name Column -->
+            <ng-container matColumnDef="getster_id">
+              <th mat-header-cell *matHeaderCellDef
+                style="padding-left: 10px;width: 120px;min-width: 85px; max-width: 150px; word-wrap: break-word;text-align: center;">
+                GETster ID
+              </th>
+              <td mat-cell *matCellDef="let element" style="padding-left:7.5px;padding-right: 7.5px;">
+                <mat-radio-button (click)="datapass(element,element.getster_id)">
+                </mat-radio-button>
+                {{ element.getster_id }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef
+                style=" padding-left: 10px; width: 250px; min-width: 120px; max-width: 250px; word-wrap: break-word;text-align: center;">
+                Face - ID / Name
+              </th>
+              <td mat-cell *matCellDef="let element" style="padding-left:7.5px;padding-right: 7.5px;">
+                <div
+                  style=" display: flex; margin-top: auto;margin-bottom: auto; margin-right:auto; margin-left: auto;">
+                  <div style="margin-top:auto;margin-bottom:auto;margin-right:4px;">
+                    <img [src]="imageURL+element.previous_login_image_of_the_day_ceph_object_id" class="cursor-pointer"
+                      style="min-height:28px; min-width:28px;max-height:28px; max-width:28px"
+                      (click)="openGetsterProfile(element.getster_id)">
+                  </div>
+                  <div style="margin-top: auto;margin-bottom: auto;">
+                    <div style="font-weight: 550; color: #3366ff">
+                      {{ element.name }} <br> {{ element.lastName }}
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="getster_category">
+              <th mat-header-cell *matHeaderCellDef
+                style="width: 100%; min-width:300px;   word-wrap: break-word;text-align:center">
+                GETster Category
+              </th>
+              <td mat-cell *matCellDef="let element" style="padding-left:7.5px">{{
+                element.getser_category }}</td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" style="text-align: center"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"
+              (click)="selection.toggle(row); onRowClicked(row)" (mouseover)="row.hovered = true"
+              (mouseout)="row.hovered = false"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">
+                No data matching the filter
+                <!-- "{{ input.value }}" -->
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div>
+          <mat-paginator class="component--mat-pagination__size" #paginator #paginatorElement
+            [length]="dataSource.data.length" [pageIndex]="0" [pageSizeOptions]="[5,10, 20]" [pageSize]="5"
+            [allValue]="paginator.length" appAddAllToPaginator (page)="pageChanged($event)">
+          </mat-paginator>
+          <div class="flex bg-white-black" id="export_btn">
+            <div class="custom-mat-floating-label">
+              <mat-form-field appearance="outline" class="component--mat-form-field__custom-input pl-2">
+                <mat-label>Filter</mat-label>
+                <input matInput (keyup)="applyFilter($event)" #input />
+              </mat-form-field>
+            </div>
+            <div class="w-full flex justify-end">
+              <span class="p-5 export-btn" [matMenuTriggerFor]="menu">Export</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="displaySection">
+
+    <div border_bottom class="h-[1px] bg-gray-400 rounded-lg mt-4 mb-1"></div>
+
+    <div class="flex mt-5 lt-lg:flex-wrap">
+      <!-- div 1 -->
+      <div class="gt-sm:w-1/2 w-full lt-lg:w-full">
+        <div class="mt-2 primary-title-heading">
+          CHANGES MADE TO THE GETster PROFILE ARE HIGHLIGHTED IN YELLOW
+        </div>
+
+        <div class="space-x-2 flex justify-end mr-2  ">
+          <div class="">
+            <button mat-raised-button class="primary-button" (click)="getster_profile_edit(element)"
+              [disabled]="[disabledBtn]">
+              Edit
+            </button>
+          </div>
+          <div class="">
+            <button mat-raised-button class="primary-button" (click)="update_profile_table1()"
+              [disabled]="disabledBtn1">
+              Save
+            </button>
+          </div>
+        </div>
+
+        <div class="flex mt-3  ">
+
+          <div class="mt-2 space-x-1">
+            <span class="secondary-heading">GETster ID:</span>
+            <span class="secondary-heading" *ngFor="let item of datavalue">{{
+              item.getster_id
+              }}</span>
+          </div>
+        </div>
+
+        <form [formGroup]="getster">
+          <div class="flex lt-xl:flex-wrap md:flex-wrap gt-sm:space-x-3 lt-xl:space-x-0 ">
+            <div class="flex flex-col w-full ">
+              <div class="flex w-full">
+                <div class="flex mt-5 w-full">
+                  <mat-form-field appearance="outline" class="w-[100%] component--mat-form-field__custom-input">
+                    <mat-label>First Name</mat-label>
+                    <input type="text" matInput placeholder="First Name" formControlName="name" />
+                    <mat-error class="error"> First Name is required! </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="flex w-full">
+                <div class="custom-mat-floating-label mt-5 w-full">
+                  <mat-form-field appearance="outline" class="w-[100%] component--mat-form-field__custom-input">
+                    <mat-label>Last Name</mat-label>
+                    <input type="text" matInput placeholder="Last Name" formControlName="lastName"
+                      class="lt-xs:w-full " />
+                    <mat-error class="error"> Last Name is required! </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col w-full">
+              <div class="flex  w-full">
+                <div class="custom-mat-floating-label mt-5 w-full">
+                  <mat-form-field appearance="outline" class="w-full component--mat-form-field__custom-input">
+                    <mat-label>Date Of Birth</mat-label>
+
+                    <input matInput [readonly]="true" [matDatepicker]="dp" [max]="max_date" formControlName="dob"
+                      required />
+                    <mat-datepicker-toggle matSuffix [for]="dp" [disabled]="disabledBtn1"></mat-datepicker-toggle>
+                    <mat-datepicker #dp disabled="false"></mat-datepicker>
+                    <mat-error *ngIf="
+                                getster.controls['dob'].hasError(
+                                  'required'
+                                ) || getster.controls['dob'].touched
+                              ">
+                      Date of Birth is required.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="flex w-full">
+                <div class="custom-mat-floating-label mt-5 w-full">
+                  <mat-form-field appearance="outline" class="w-[100%] component--mat-form-field__custom-input">
+                    <mat-label>Select Gender: </mat-label>
+                    <mat-select appearance="outline" required formControlName="gender">
+                      <mat-option [value]="0"> Male </mat-option>
+                      <mat-option [value]="1">Female </mat-option>
+                      <mat-option [value]="2">Other </mat-option>
+                    </mat-select>
+                    <mat-error>Choose an option</mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="mt-4 ml-1">
+            <div class="text-justify">
+              <span class="normal-heading">Select the categories that best describe the user relationship with Your Biz
+                Name*:
+              </span>
+              <br />
+              <!-- <span class="primary-heading">GETster.Tech Pvt Ltd Full Registered Name:</span> -->
+              <!-- Tree view -->
+              <mat-card class="mt-2 w-3/4 overflow-auto max-h-[200px]">
+                <div class="">
+                  <mat-tree #tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl"
+                    class="example-tree mat-tree-position ">
+                    <!-- Without Children -->
+                    <mat-tree-node *matTreeNodeDef="let node">
+                      <div class="grid">
+                        <li class="mat-tree-node">
+                          <mat-checkbox class="checklist-leaf-node" [disabled]="(checklistSelection.selected.length === 1 &&
+                                                  checklistSelection.isSelected(node)) ||
+                                                    (checklistSelection.selected.length === 3 &&
+                                                    !checklistSelection.isSelected(node)) || treeCheckbox"
+                            [checked]="checklistSelection.isSelected(node)" (change)="
+                                                      $event ? todoLeafItemSelectionToggle(node) : null;addCategoryAdditionalFields(node,!checklistSelection.isSelected(node))
+                                                    " [value]="node.getster_category_name"><span class="txtColor">
+                              {{ node.getster_category_name }}
+                            </span></mat-checkbox>
+                        </li>
+                      </div>
+
+                    </mat-tree-node>
+
+                    <!-- With Children -->
+                    <mat-nested-tree-node *matTreeNodeDef="let node; when: hasNestedChild">
+                      <li>
+                        <div class="mat-tree-node">
+                          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.Name">
+                            <mat-icon class="mat-icon-rtl-mirror">
+                              {{
+                              nestedTreeControl.isExpanded(node)
+                              ? "expand_more"
+                              : "chevron_right"
+                              }}
+                            </mat-icon>
+                          </button>
+                          {{ node.getster_category_name }}
+                        </div>
+                        <ul [class.example-tree-invisible]="
+                            !nestedTreeControl.isExpanded(node)
+                          ">
+                          <ng-container matTreeNodeOutlet></ng-container>
+                        </ul>
+                      </li>
+                    </mat-nested-tree-node>
+                  </mat-tree>
+
+                </div>
+              </mat-card>
+            </div>
+            <div border_bottom class="h-[1px] bg-gray-400 rounded-lg mt-2"></div>
+            <div class="ml-1">
+              <form [formGroup]="regmob">
+                <div class="flex mt-5 justify-between">
+                  <div class="custom-mat-floating-label ">
+                    <mat-form-field appearance="outline"
+                      class=" w-[106%] component--mat-form-field__custom-input country_input_field">
+                      <ngx-mat-intl-tel-input formControlName="phone" [enablePlaceholder]="true" [enableSearch]="true"
+                        name="phone" #phone inputPlaceholder="enter mobile number" [preferredCountries]="['in', 'us']"
+                        id="mat-menu-panel" [disabled]="true">
+                      </ngx-mat-intl-tel-input>
+                      <mat-hint class="mt-4">eg : {{ phone.selectedCountry?.placeHolder }}</mat-hint>
+                      <mat-label>Registered Mobile number</mat-label>
+                    </mat-form-field>
+                  </div>
+                  <div class="flex flex-end py-auto mr-2 ">
+                    <div>
+                      <button mat-raised-button class="primary-button" [disabled]="[disabledBtn2]"
+                        (click)="sendEmailPhoneNumber()">
+                        Change RMN
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+              <div class="mt-4">
+                <span class="normal-heading">A Link will be sent to a new mobile number for face
+                  recognition/password verification. Mobile no shall be changed
+                  unless face id is verified.
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div border_bottom class="h-[1px] bg-gray-400 rounded-lg mt-2 mb-2"></div>
+
+          <div class="ml-1 mt-1">
+            <div class="ml-1">
+              <span class="normal-heading">Face Recognition Image :</span>
+            </div>
+            <div class="flex justify-between">
+              <div class="">
+                <!-- <mat-card class="md:w-[150px]"> -->
+                <div class="min-w-[80px] min-h-[80px]">
+                  <mat-card>
+                    <img [src]="getProfile" class="min-w-[80px] min-h-[80px] max-w-[80px] max-h-[80px] cursor-pointer"
+                      alt="" (click)="openGetsterProfile(id)" />
+                  </mat-card>
+                </div>
+                <!-- </mat-card> -->
+              </div>
+              <div class="flex justify-end mr-2 items-center  w-full   py-auto ">
+                <button mat-raised-button class="primary-button" [disabled]="[disabledBtn3]">
+                  Change FaceID
+                </button>
+              </div>
+            </div>
+            <div class="mt-3 ml-1 normal-heading">
+              <span>A Link will be sent to the registered mobile no for new face ID
+                registration</span>
+            </div>
+          </div>
+
+          <div border_bottom class="h-[1px] bg-gray-400 rounded-lg mt-2 mb-2"></div>
+
+          <div class="mt-5 ml-1">
+            <form [formGroup]="getpass">
+              <div class="flex justify-between">
+
+                <div class="max-w-[50%]">
+                  <mat-form-field appearance="outline" class="w-full component--mat-form-field__custom-input">
+                    <mat-label>Login Password</mat-label>
+                    <input type="text" matInput placeholder="Designation" formControlName="pass"
+                      [type]="hide ? 'password' : 'text'" />
+                    <button mat-icon-button matSuffix (click)="hide = hide" [attr.aria-label]="'Hide password'"
+                      [attr.aria-pressed]="hide">
+                      <!-- <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon> -->
+                    </button>
+                  </mat-form-field>
+                </div>
+
+                <div class="mt-2 flex justify-end ">
+                  <div class="mr-2">
+                    <button mat-raised-button class="primary-button" [disabled]="[disabledBtn4]" (click)="sendEmail()">
+                      Reset Password
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div>
+              <span class="normal-heading">A Link will be sent to the registered mobile no for password
+                reset</span>
+            </div>
+          </div>
+
+          <div border_bottom class="h-[1px] bg-gray-400 rounded-lg mt-2 mb-2"></div>
+
+
+          <div class="ml-1">
+            <span class="normal-heading">Additional Data:</span>
+          </div>
+
+          <div class="mt-2 grid grid-cols-3 lt-lg:grid-cols-1 gap-2">
+            <ng-container *ngFor="
+                      let item of getGetsterCategoryWiseAdditionalFields ;
+                      let i = index
+                    " [formGroup]="arrayForm">
+
+
+              <mat-card class="">
+                <div class="secondary-heading text-center mb-1">
+                  {{ item.getster_category_name }}
+                </div>
+
+                <ng-container *ngFor="
+                                    let dynamicform of dynamicFormsField(item.getster_category_id).controls;
+                                    let ii = index
+                                  ">
+                  <div class="" *ngIf="arrayForm.value[item.getster_category_id]"
+                    [formArrayName]="item.getster_category_id">
+                    <ng-container [formGroupName]="ii">
+                      <div class="">
+                        <!-- text,number,date,time,email-->
+                        <ng-container *ngIf="
+                                            arrayForm.value[item.getster_category_id][ii]
+                                              .headerType == 'text' ||
+                                            arrayForm.value[item.getster_category_id][ii]
+                                              .headerType == 'number' ||
+                                            arrayForm.value[item.getster_category_id][ii]
+                                              .headerType == 'date' ||
+                                            arrayForm.value[item.getster_category_id][ii]
+                                              .headerType == 'time' ||
+                                            arrayForm.value[item.getster_category_id][ii]
+                                              .headerType == 'email'
+                                          ">
+                          <div class="flex py-2 w-full justify-center">
+                            <mat-form-field appearance="outline"
+                              class="w-[90%] component--mat-form-field__custom-input justify-center">
+                              <mat-label>{{
+                                arrayForm.value[item.getster_category_id][ii]
+                                .headerKey
+                                }}</mat-label>
+
+                              <input formControlName="headerValue" matInput [type]="
+                                                  arrayForm.value[item.getster_category_id][ii]
+                                                    .headerType
+                                                 " />
+                            </mat-form-field>
+                          </div>
+                        </ng-container>
+
+                        <!-- radio -->
+                        <ng-container *ngIf="
+                                            arrayForm.value[item.getster_category_id][ii]
+                                              .headerType == 'radio'
+                                          ">
+                          <div class="flex py-2 w-full justify-center">
+                            <mat-radio-group formControlName="headerKey">
+                              <mat-radio-button value="{{
+                                                  arrayForm.value[item.getster_category_id][ii]
+                                                    .headerKey
+                                                }}">{{
+                                arrayForm.value["dynamicForm_"][ii]
+                                .headerLabel
+                                }}"
+                              </mat-radio-button>
+                            </mat-radio-group>
+                          </div>
+                        </ng-container>
+
+                        <!-- checkbox -->
+                        <ng-container *ngIf="
+                                            arrayForm.value[item.getster_category_id][ii]
+                                              .headerType == 'checkbox'
+                                          ">
+                          <div class="flex py-2 w-full justify-center">
+                            <mat-checkbox formControlName="headerKey">{{
+                              arrayForm.value[item.getster_category_id][ii]
+                              .headerLabel
+                              }}</mat-checkbox>
+                          </div>
+                        </ng-container>
+
+                        <!-- Textarea -->
+                        <ng-container *ngIf="
+                                            arrayForm.value[item.getster_category_id][ii]
+                                              .headerType == 'textarea'
+                                          ">
+                          <div class="flex py-2 w-full justify-center">
+                            <mat-form-field appearance="outline"
+                              class="w-[90%] component--mat-form-field__custom-input justify-center">
+                              <mat-label>{{
+                                arrayForm.value[item.getster_category_id][ii]
+                                .headerLabel
+                                }}</mat-label>
+                              <textarea matInput formControlName="headerKey"></textarea>
+                            </mat-form-field>
+                          </div>
+                        </ng-container>
+
+                      </div>
+                    </ng-container>
+                  </div>
+                </ng-container>
+
+              </mat-card>
+
+            </ng-container>
+          </div>
+
+          <div>
+            <div class="ml-1 mt-3">
+              <span class="normal-heading">About The GETster:</span>
+            </div>
+            <div>
+              <div class="mt-2 ml-1">
+                <mat-form-field appearance="outline"
+                  class="w-[calc(100%-10px)] component--mat-form-field__custom-input">
+                  <!-- <mat-label>About The User:</mat-label> -->
+                  <textarea type="text" [maxLength]="1000" formControlName="aditional_field_user" matInput
+                    placeholder="About The User:" #reflen maxlength="1000"></textarea>
+                  <!-- <input matInput formControlName="aditional_field_user" /> -->
+                </mat-form-field>
+              </div>
+              <div style="font-weight: 500; font-size: 11px; color: red" *ngIf="reflen.value.length == 1000">
+                Too long Text ,Text character must be 1000 only !!!
+              </div>
+              <!-- <div class="normal-heading">{{ 1000-reflen.value.length }}</div> -->
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div border_right class="w-[1px] bg-gray-400 rounded-lg mt-2 mb-2 lt-lg:hidden"></div>
+      <div border_bottom class="h-[1px] bg-gray-400 rounded-lg mt-2 mb-2 lt-lg:hidden"></div>
+
+      <!--div 2-->
+      <div class="gt-md:w-1/2 w-full">
+        <div>
+          <div class="mt-4 ml-2">
+            <div class="primary-title-heading">GETster E Identity Card</div>
+          </div>
+          <form [formGroup]="getster">
+            <mat-card class="bg-blue-600 w-[350px] mx-auto" *ngFor="let item of datavalue">
+              <div class="flex mt-2 space-x-2  justify-center">
+                <div class="" *ngIf="getster_photo">
+                  <img [src]="getProfile" class="rounded-sm shadow-black shadow-lg  h-[100px] w-[100px] cursor-pointer"
+                    alt="" (click)="openGetsterProfile(id)" />
+                </div>
+                <div class="" *ngIf="app_icon">
+                  <qrcode [qrdata]="cardUrl" [width]="100" [errorCorrectionLevel]="'Q'" [margin]="1">
+                  </qrcode>
+                </div>
+                <div class="" *ngIf="barcode">
+                  <img src="../../../../../assets/icons/icon-72x72.png"
+                    class="rounded-sm shadow-black shadow-lg  h-[100px] w-[100px]" alt="" />
+                </div>
+              </div>
+              <div border_bottom class="h-[1px] bg-black mt-2"></div>
+              <div class="mt-2 flex">
+                <div class="w-[34%] my-auto " style="white-space: nowrap">
+                  <span class="card-side-heading">Name:</span>
+                </div>
+                <div class="my-auto rounded-2xl bg-white text-center  w-[66%] pt-1 pb-1">
+                  <span class="primary-heading">{{ item.name }} {{ item.lastName }}</span>
+                </div>
+              </div>
+              <div border_bottom class="h-[1px] bg-black mt-2 "></div>
+              <div class="mt-2 flex" style="white-space: nowrap" *ngIf="dob">
+                <div class="w-[34%] my-auto">
+                  <span class="card-side-heading">Date Of Birth:</span>
+                </div>
+                <div class="my-auto rounded-2xl bg-white text-center w-[66%] pt-1 pb-1">
+                  <span class="primary-heading">{{
+                    item.dob | date : "dd MMM y"
+                    }}</span>
+                </div>
+              </div>
+              <div class="flex mt-2" *ngIf="category">
+                <div class="w-[35%] my-auto mr-[2px]" style="white-space: nowrap">
+                  <span class="card-side-heading">GETster Category:</span>
+                </div>
+                <div class=" my-auto rounded-2xl bg-white text-center  min-w-[65%] pt-1 pb-1">
+                  <span class="secondary-heading">{{ item.getser_category }} </span>
+                </div>
+              </div>
+              <div class="flex mt-2 justify-end " *ngIf="institution">
+                <!-- <div class="mt-3" style="white-space: nowrap">
+                                  <span class="card-side-heading">Institution Name:</span>
+                                </div> -->
+                <div class="rounded-2xl bg-white text-center  w-[66%]   pt-1 pb-1">
+                  <span class="normal-heading">GETster.Tech Pvt Ltd</span>
+                </div>
+              </div>
+
+              <div border_bottom class="h-[1px] bg-black mt-2 "></div>
+              <div class="flex items-center mt-2" *ngIf="mobile1">
+                <div class="rounded-2xl bg-white text-center  p-1 my-auto  ">
+                  <img src="assets/phone.svg" style="border-radius: 50%; height: 20px; min-width:21px; margin:1px" />
+                </div>
+                <div class=" my-auto rounded-2xl bg-white text-center  min-w-[60px] pt-1 pb-1 ml-3 min-h-[32px]">
+                  <span class="normal-heading">+{{ country_code_to_number }}</span>
+                </div>
+                <div class="my-auto rounded-2xl bg-white text-center  pt-1 pb-1 ml-2 w-full min-h-[32px]">
+                  <span class="normal-heading">{{ item.mobile }}</span>
+                </div>
+              </div>
+              <div class="flex items-center mt-2" *ngIf="mobile2">
+                <div class="my-auto rounded-2xl bg-white text-center p-1 ">
+                  <img src="assets/phone1.svg"
+                    style="border-radius: 50%; min-height: 20px; min-width: 21px;margin: 1px;" />
+                </div>
+                <div class=" my-auto rounded-2xl bg-white text-center min-w-[60px] pt-1 pb-1 ml-3   min-h-[32px]">
+                  <span class="normal-heading">+{{ country_code_to_number }}</span>
+                </div>
+                <div
+                  class=" my-auto rounded-2xl bg-white text-center  pt-1 pb-1 ml-2 w-full  min-h-[32px] overflow-hidden">
+                  <ng-container *ngIf="disabledBtn1==true">
+                    <span class="normal-heading">{{ item.emgcontact }}</span>
+                  </ng-container>
+                  <!-- <div class="pb-[2px]">
+                        <input class="normal-heading text-center" type="number" formControlName="emMobileMo" />
+                        <div class="error text-[9px]" *ngIf="getster.get('emMobileMo').hasError('required')">
+                          Please enter emergency mobile number
+                        </div>
+                      </div> -->
+                  <ng-container *ngIf="disabledBtn1==false">
+                    <div>
+                      <mat-form-field appearance="outline"
+                        class=" w-[90%] component--mat-form-field__custom-input flex items-center">
+                        <input class="normal-heading text-center" formControlName="emMobileMo" type="number" matInput
+                          onKeyPress="if(this.value.length==10) return false;" required
+                          style="text-align: center;  margin-bottom: 3px;" />
+                      </mat-form-field>
+                      <!-- <div class="error text-[10px] break-word mx-3"
+                            *ngIf="getster.get('emMobileMo').hasError('required')">
+                            Please enter emergency mobile number
+                          </div> -->
+                      <div class="error text-[10px] break-word mx-3"
+                        *ngIf="getster.get('emMobileMo').hasError('required')">
+                        Please enter emergency mobile number
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="flex items-center mt-2" *ngIf="bldg">
+                <div class="my-auto rounded-2xl bg-white text-center  p-1 ">
+                  <img src="assets/blood_type.svg" style="border-radius: 50%; height: 21px; width: 26px;margin: 1px;" />
+                </div>
+                <div class="my-auto rounded-2xl bg-white text-center  ml-3 w-full pt-1 pb-1   min-h-[32px]">
+                  <ng-container *ngIf="disabledBtn1==true">
+                    <span class="normal-heading">{{ item.bldgrup }}</span>
+                  </ng-container>
+                  <!-- <div class="pb-[2px]">
+                        <input class="normal-heading text-center " type="text" formControlName="bloodGroup" />
+                        <div class="error text-[9px]" *ngIf="getster.get('bloodGroup').hasError('required')">
+                          Please enter blood group name
+                        </div>
+                      </div> -->
+                  <ng-container *ngIf="disabledBtn1==false">
+                    <mat-form-field appearance="outline" class="w-[90%] component--mat-form-field__custom-input">
+                      <mat-select appearance="outline" required formControlName="bloodGroup"
+                        class="text-[12px] text-[#000000] text-center font-[550]"
+                        style="text-align: center;  margin-bottom: 5px;">
+                        <mat-option class="text-[12px] text-center text-[#000000]"
+                          *ngFor="let bloodGroups of bloodGroups" [value]="bloodGroups.value">
+                          <span class="text-[12px] text-center">{{bloodGroups.viewValue}} </span>
+                        </mat-option>
+                      </mat-select>
+                      <div class="error text-[9px]" *ngIf="getster.get('bloodGroup').hasError('required')">
+                        Please enter blood group name
+                      </div>
+                    </mat-form-field>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="flex items-center mt-2" *ngIf="email">
+                <div class=" my-auto rounded-2xl bg-white text-center  p-1  "
+                  style="border-radius: 50%; height: 32px; width: 33px">
+                  <mat-icon class="text-blue-500">email</mat-icon>
+                </div>
+                <div class="my-auto rounded-2xl bg-white text-center ml-3 pt-1 pb-1 min-h-[32px] w-full">
+                  <ng-container *ngIf="disabledBtn1==true">
+                    <span class="normal-heading text-center">{{ item.ademail }}</span>
+                  </ng-container>
+                  <!-- <div class="pb-[2px]">
+                        <input class="normal-heading text-center" type="email" formControlName="emailId" required />
+                        <div class="error text-[9px]" *ngIf=" getster.get('emailId').hasError('required')">
+                          Please enter your correct email address
+                        </div>
+                      </div> -->
+
+                  <ng-container *ngIf="disabledBtn1==false">
+                    <mat-form-field appearance="outline" class="w-[90%] component--mat-form-field__custom-input">
+                      <input formControlName="emailId" type="text" matInput class="normal-heading text-center"
+                        style="text-align: center;  margin-bottom: 3px;" required />
+                    </mat-form-field>
+                    <div class="error text-[10px]" *ngIf=" getster.get('emailId').hasError('pattern')">
+                      Please enter your valid email address
+                    </div>
+                    <!-- <div class="error text-[10px]" *ngIf="!getster.valid">
+                          Please enter your valid email address
+                        </div> -->
+                  </ng-container>
+
+                </div>
+              </div>
+              <div class="flex items-center my-2" *ngIf="add">
+                <div class="my-auto rounded-2xl bg-white text-center p-1 "
+                  style="border-radius: 50%; height: 32px; width: 33px">
+                  <mat-icon class="text-blue-500">place</mat-icon>
+                </div>
+                <div class="my-auto  rounded-2xl bg-white text-center  ml-3 pt-1 pb-1 w-full min-h-[32px]">
+                  <ng-container>
+                    <span class="normal-heading">{{ locationAddress }}</span>
+                  </ng-container>
+
+                  <!-- <ng-container *ngIf="disabledBtn1==false">
+                        <mat-form-field appearance="outline"
+                          class="w-[90%] component--mat-form-field__custom-input text-center">
+                          <textarea type="text" formControlName="cardAddress" matInput class="normal-heading text-center"
+                            style="text-align: center;"></textarea>
+                        </mat-form-field>
+                        <div class="error text-[10px]" *ngIf="getster.get('cardAddress').hasError('required')">
+                          Please enter your address
+                        </div>
+                      </ng-container> -->
+                </div>
+              </div>
+            </mat-card>
+          </form>
+        </div>
+
+        <div class="flex space-x-1 mt-10 ml-2">
+          <div>
+            <span class="normal-heading">Your Residential Address Location :</span>
+          </div>
+          <div class="ml-1 mt-1">
+            <div *ngIf="mapChange==true" class="secondary-heading">
+              <u>Change</u>
+            </div>
+            <div *ngIf="mapChange==false" class="primary-heading cursor-pointer">
+              <u (click)="openDialog()">Change</u>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map -->
+        <div class="flex justify-center mt-2 ">
+          <div class="map-frame w-[88%]" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)">
+            <!-- <div id="map"></div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<!-- Mat Menu -->
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="downloadAsPDF()">
+    <mat-icon>picture_as_pdf</mat-icon>
+    <span>Print / Export PDF</span>
+  </button>
+  <button mat-menu-item (click)="exportReport('sample.xlsx')">
+    <mat-icon>grid_on</mat-icon>
+    <span>Export SpreadSheet</span>
+  </button>
+  <button mat-menu-item (click)="exportReport('sample.csv')">
+    <mat-icon>grid_on</mat-icon>
+    <span>Export csv File</span>
+  </button>
+  <button mat-menu-item (click)="exportReport('sample.json')">
+    <mat-icon>grid_on</mat-icon>
+    <span>Export json</span>
+  </button>
+</mat-menu>

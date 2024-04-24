@@ -1,0 +1,15 @@
+// @import'../../../../styles/global';
+// @import'../../../../styles/variables';
+
+@import "global";
+@import "variables";
+
+.line1 {
+  @include heading($secondary-color, $medium-font-weight, 14);
+}
+.line2 {
+  @include heading($primary-color, $medium-font-weight, 14);
+}
+.line3 {
+  @include heading($secondary-color, $medium-font-weight, 14);
+}

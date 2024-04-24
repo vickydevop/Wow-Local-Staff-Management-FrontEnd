@@ -1,0 +1,176 @@
+<div class="mt-1">
+  <span class="normal-heading">
+    List of Approved GETsters for your camp:
+  </span>
+</div>
+<div class="flex lt-lg:flex-wrap">
+  <div class="gt-sm:w-[50%] lt-lg:w-full">
+    <div class="mat-elevation-z8  table-responsive w-full">
+      <div id="pdfTable">
+        <table id="excel_table" matSort mat-table #table [dataSource]="dataSource"
+          class="mat-elevation-z8 component--mat-table__custom-table checklist-table table-bordered table-sm block"
+          style="margin-left: auto; margin-right: auto;">
+          <!-- Name Column -->
+          <ng-container matColumnDef="user_id">
+            <th mat-header-cell *matHeaderCellDef
+              style="padding-left: 10px;width: 120px;min-width: 85px; max-width: 150px; word-wrap: break-word;text-align: center;">
+              GETster ID
+            </th>
+            <td mat-cell *matCellDef="let element" style="padding-left:7.5px;padding-right: 7.5px;">
+              <mat-radio-button (click)="getGesterId(element)">
+              </mat-radio-button>
+              {{ element.getster_id }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef
+              style=" padding-left: 10px; width: 250px; min-width: 120px; max-width: 250px; word-wrap: break-word;text-align: center;">
+              Face - ID / Name
+            </th>
+            <td mat-cell *matCellDef="let element" style="padding-left:7.5px;padding-right: 7.5px;">
+              <div style=" display: flex; margin-top: auto;margin-bottom: auto; margin-right:auto; margin-left: auto;">
+                <div style="margin-top:auto;margin-bottom:auto;margin-right:4px;">
+                  <img [src]="imageURL+element.previous_login_image_of_the_day_ceph_object_id" class="cursor-pointer"
+                    style="min-height:28px; min-width:28px;max-height:28px; max-width:28px"
+                    (click)="openGetsterProfile(element.getster_id)">
+                </div>
+                <div style="margin-top: auto;margin-bottom: auto;">
+                  <div style="color: #3366ff;font-weight: 550;">
+                    {{ element.first_name }} <br> {{ element.last_name }}
+                  </div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="getster_category">
+            <th mat-header-cell *matHeaderCellDef
+              style="width: 100%; min-width: 300px; word-wrap: break-word;text-align:center">
+              GETster Category
+            </th>
+            <td mat-cell *matCellDef="let element" style="padding-left:7.5px;padding-right: 7.5px;">{{
+              element.getster_category_name }}</td>
+          </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" style="text-align: center"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selection.toggle(row); onRowClicked(row)"
+            (mouseover)="row.hovered = true" (mouseout)="row.hovered = false"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              No data matching the filter
+              <!-- "{{ input.value }}" -->
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <mat-paginator class="component--mat-pagination__size" #paginator #paginatorElement
+          [length]="dataSource.data.length" [pageIndex]="0" [pageSizeOptions]="[5,10, 20]" [pageSize]="5"
+          [allValue]="paginator.length" appAddAllToPaginator (page)="pageChanged($event)">
+        </mat-paginator>
+        <div class="flex bg-white-black" id="export_btn">
+          <div class="custom-mat-floating-label">
+            <mat-form-field appearance="outline" class="component--mat-form-field__custom-input pl-2">
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)" #input />
+            </mat-form-field>
+          </div>
+          <div class="w-full flex justify-end">
+            <span class="p-5 export-btn" [matMenuTriggerFor]="menu">Export</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="downloadAsPDF()">
+        <mat-icon>picture_as_pdf</mat-icon>
+        <span>Print / Export PDF</span>
+      </button>
+      <button mat-menu-item (click)="exportReport('sample.xlsx')">
+        <mat-icon>grid_on</mat-icon>
+        <span>Export SpreadSheet</span>
+      </button>
+      <button mat-menu-item (click)="exportReport('sample.csv')">
+        <mat-icon>grid_on</mat-icon>
+        <span>Export csv File</span>
+      </button>
+      <button mat-menu-item (click)="exportReport('sample.json')">
+        <mat-icon>grid_on</mat-icon>
+        <span>Export json</span>
+      </button>
+    </mat-menu>
+  </div>
+
+  <div class=" gt-md:ml-1 lt-xs:w-full gt-xs:w-1/2 lt-lg:w-full lt-lg:mt-1" *ngIf="radioClick!=false">
+    <mat-card>
+      <mat-card class="box-shadow ">
+        <div>
+          <div class="text-end primary-heading">Getster ID: {{getsterId}}</div>
+          <div class="flex flex-row">
+            <div class="w-[10%] lt-md:w-[24%] md:w-[19%]">
+              <img class=" min-h-[50px] max-w-[50px] max-h-[50px]  rounded-md cursor-pointer" [src]="getProfile"
+                (click)="openGetsterProfile(getsterId)" />
+            </div>
+            <div class="w-[90%] lt-md:w-[76%] md:w-[76%] flex flex-col">
+              <span class="primary-heading">
+                First Name:
+                <a class="secondary-heading underline cursor-pointer"> {{firstName}} </a>
+              </span>
+              <span class="primary-heading">
+                Last Name:
+                <a class="secondary-heading underline cursor-pointer">{{lastName}}</a>
+              </span>
+              <span class="primary-heading">
+                Reg Mobile No:
+                <span class="secondary-heading">{{regMobileNumber}}</span></span>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+      <div class="normal-heading mt-1">Additional Data</div>
+      <div *ngFor="let data of additionalData1;let i = index;">
+        <mat-card class="my-1">
+          <div class="secondary-heading py-1">{{gesterCategory[i]}}</div>
+          <div *ngFor="let j of data">
+            <div class="flex">
+              <div class="primary-heading my-1 mr-1">{{j.headerKey}}:</div>
+              <div *ngIf="j.headerType=='text'">
+                <div class="secondary-heading my-1">{{j.headerValue}}</div>
+              </div>
+              <div *ngIf="j.headerType=='number'">
+                <div class="secondary-heading my-1">{{j.headerValue}}</div>
+              </div>
+              <div *ngIf="j.headerType=='date'">
+                <div class="secondary-heading my-1">{{j.headerValue|date:'d MMM YYYY'}}</div>
+              </div>
+              <div *ngIf="j.headerType=='checkbox'">
+                <div class="secondary-heading my-1">{{j.headerValue}}</div>
+              </div>
+              <div *ngIf="j.headerType=='textarea'">
+                <div class="secondary-heading my-1">{{j.headerValue}}</div>
+              </div>
+              <div *ngIf="j.headerType=='time'">
+                <div class="secondary-heading my-1">{{ j.headerValue| timeFormat }}
+                </div>
+              </div>
+              <div *ngIf="j.headerType=='email'">
+                <div class="secondary-heading my-1">{{j.headerValue}}</div>
+              </div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </mat-card>
+
+    <div class="flex flex-row mt-3 space-x-4 w-full item-center justify-center">
+      <!-- <button mat-raised-button class="primary-button" (click)="updateGetsterRemoveApprovalRegistrationStatus()">
+        Delete
+      </button> -->
+
+      <button mat-raised-button class="primary-button" (click)=" updateGetsterApprovalBlockStatus()">Block</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,297 @@
+<div class="gt-sm:flex p-1">
+  <!-- div 1 -->
+  <div class="lt-xs:w-full md:w-1/2 lg:w-1/2 lt-lg:w-full">
+    <div class="ml-1 mt-1">
+      <div>
+        <span class="normal-heading">Select from the following user categories who are eligible for your GETsters’s E
+          Identity card:</span>
+      </div>
+      <div>
+        <!-- Tree view -->
+        <mat-card class="mt-2 ml-1 w-3/4 overflow-auto max-h-[200px]">
+          <div class="component--mat-tab__custom-style">
+            <mat-tree #tree [dataSource]="nestedDataSource" [treeControl]="nestedTreeControl"
+              class="example-tree mat-tree-position">
+              <!-- Without Children -->
+              <mat-tree-node *matTreeNodeDef="let node">
+                <li class="mat-tree-node">
+                  <mat-radio-group [(ngModel)]="selected_category_name_val">
+                    <mat-radio-button [value]="node" (change)="$event ? todoLeafItemSelectionToggle(node) : null"
+                      (click)="selectedCat(node.getster_category_id)">
+                      <span class="txtColor">
+                        {{ node.getster_category_name }}
+                      </span>
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </li>
+              </mat-tree-node>
+
+              <!-- With Children -->
+              <mat-nested-tree-node *matTreeNodeDef="let node; when: hasNestedChild">
+                <div class="mat-tree-node">
+                  <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.Name">
+                    <mat-icon class="mat-icon-rtl-mirror">
+                      {{
+                      nestedTreeControl.isExpanded(node)
+                      ? "expand_more"
+                      : "chevron_right"
+                      }}
+                    </mat-icon>
+                  </button>
+                  {{ node.getster_category_name }}
+                </div>
+                <ul [class.example-tree-invisible]="!nestedTreeControl.isExpanded(node)">
+                  <ng-container matTreeNodeOutlet></ng-container>
+                </ul>
+              </mat-nested-tree-node>
+            </mat-tree>
+            <!-- <div class="">selected category name is : {{ selected_category_name_val | json }}</div> -->
+          </div>
+        </mat-card>
+      </div>
+    </div>
+    <div border_bottom class="h-[1px] bg-gray-400 mt-4 mb-1"></div>
+    <div class="mt-4 ml-1">
+      <button mat-raised-button class="primary-button" [disabled]="disabledbtn" (click)="submit()">Format of E Identity
+        Card</button>
+    </div>
+
+    <!-- colors -->
+    <div class="flex  lt-xs:flex-wrap gt-xs:flex-wrap">
+      <div class="p-1 flex justify-between space-x-3">
+        <!--  -->
+        <div class="flex flex-col w-[56px]">
+          <div class="">
+            <span class="normal-heading">Background <br />
+              Color</span>
+          </div>
+          <div class="">
+            <input [(colorPicker)]="color" (colorPickerChange)="cardbgcolor($event)" class="h-[50px] w-[50px]"
+              [style.background]="color" />
+          </div>
+        </div>
+        <!--  -->
+        <div class="flex flex-col w-[56px]">
+          <div class="">
+            <span class="normal-heading">Text Type: 1</span>
+          </div>
+          <div class="">
+            <input [(colorPicker)]="color1" (colorPickerChange)="cardtext1clr($event)" class="h-[50px] w-[50px]"
+              [style.background]="color1" />
+          </div>
+        </div>
+        <!--  -->
+        <div class="flex flex-col w-[56px]">
+          <div class="">
+            <span class="normal-heading">Text Type: 2</span> <br />
+          </div>
+          <div class="">
+            <input [(colorPicker)]="color2" (colorPickerChange)="cardtext2clr($event)" class="h-[50px] w-[50px]"
+              [style.background]="color2" />
+          </div>
+        </div>
+        <!--  -->
+        <div class="flex flex-col w-[56px]">
+          <div class="">
+            <span class="normal-heading">Text Type: 3</span> <br />
+          </div>
+          <div class="">
+            <input [(colorPicker)]="color3" (colorPickerChange)="cardtext3clr($event)" class="h-[50px] w-[50px]"
+              [style.background]="color3" />
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col justify-end">
+        <div class="ml-1">
+          <span class="normal-heading">Font</span>
+        </div>
+        <div class="">
+          <form [formGroup]="fonts">
+            <mat-form-field appearance="outline"
+              class="gt-sm:w-[100%] lt-xs:w-3/4 normal-heading component--mat-form-field__custom-input">
+              <mat-select appearance="outline" required formControlName="font">
+                <mat-option *ngFor="let number of item" (click)="fontchange(number)" [value]="number">
+                  {{ number }}
+                </mat-option>
+              </mat-select>
+              <mat-error>Choose an option</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- card design -->
+    <div class="mt-3 w-[330px] mx-auto">
+      <mat-card [style]="{'background-color':cardbgclrchange}" [ngStyle]="{'background-color':bgclr}"
+        class="bg-blue-600">
+        <div class="flex justify-center mx-auto space-x-2 ">
+          <div class="flex w-[100px] h-[70px] space-x-2">
+            <div class="">
+              <img src="../../../../../assets/juck.png" class="rounded-sm shadow-black shadow-lg  w-[70px] h-[70px]"
+                alt="">
+            </div>
+            <div class="">
+              <mat-checkbox (change)="checkprofile($event)" [checked]="getster_photo==1?true:false"></mat-checkbox>
+            </div>
+          </div>
+          <div class=" flex w-[100px] h-[70px] space-x-2">
+            <div class="">
+              <img src="assets/xyzschool.png" class=" rounded-sm shadow-black shadow-lg  w-[70px] h-[70px]" alt="">
+            </div>
+            <div class="">
+              <mat-checkbox (change)="checkschlpic($event)" [checked]="app_icon==1?true:false"></mat-checkbox>
+            </div>
+          </div>
+
+          <div class="flex w-[100px] h-[70px] space-x-2">
+            <div class="">
+              <img src="../../../../../assets/icons/icon-72x72.png"
+                class="rounded-sm shadow-black shadow-lg  w-[70px] h-[70px]" alt="">
+            </div>
+            <div class="">
+              <mat-checkbox (change)="checkqr($event)" [checked]="barcode==1?true:false"></mat-checkbox>
+            </div>
+          </div>
+        </div>
+        <div border_bottom class="h-[1px] bg-black mt-2"></div>
+        <div class="mt-2 flex">
+          <div class="my-auto w-[33%]" style="white-space: nowrap;">
+            <span class="card-heading" [style]="{'color':cardtext1clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr1,'font-family':fontclr}">Name:</span>
+          </div>
+          <div class="my-auto w-[60%] rounded-2xl bg-white text-center pt-1 pb-1">
+            <span class="primary-heading" [style]="{'color':cardtext2clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr2,'font-family':fontclr}">vicky
+              chethan</span>
+          </div>
+        </div>
+        <div border_bottom class="h-[1px]  bg-black mt-2 "></div>
+        <div class="mt-2 flex" style="white-space: nowrap;">
+          <div class="mx-auto  w-[35%] ">
+            <span class="card-heading" [style]="{'color':cardtext1clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr1,'font-family':fontclr}">Date Of
+              Birth:</span>
+          </div>
+          <div class="mx-auto  w-[65%] rounded-2xl bg-white text-center  pt-1 pb-1">
+            <span class="normal-heading" [style]="{'color':cardtext2clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr2,'font-family':fontclr}">23 Jul
+              2022</span>
+          </div>
+          <div class="my-auto ml-2">
+            <mat-checkbox (change)="checkdob($event)" [checked]="dob1==1?true:false"></mat-checkbox>
+          </div>
+        </div>
+        <div class="mt-2 flex">
+          <div class="my-auto w-[35%]" style="white-space: nowrap;">
+            <span class="card-heading" [style]="{'color':cardtext1clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr1,'font-family':fontclr}">User
+              Category:</span>
+          </div>
+          <div class=" my-auto w-[65%] rounded-2xl bg-white text-center flex items-center justify-center  ml-1  py-2">
+            <span class="secondary-heading" [style]="{'color':cardtext2clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr2,'font-family':fontclr}">Developer</span>
+          </div>
+          <div class="my-auto ml-2">
+            <mat-checkbox (change)="checkcategory($event)" [checked]="category1==1?true:false"></mat-checkbox>
+          </div>
+        </div>
+        <div class="mt-2 flex justify-end">
+          <!-- <div class="mt-3 w-[35%]" style="white-space: nowrap;">
+            <span class="card-heading" [style]="{'color':cardtext1clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr1,'font-family':fontclr}">Institution
+              Name:</span>
+          </div> -->
+          <div class=" w-[60%] rounded-2xl bg-white text-center   ml-1 pt-1 pb-1">
+            <span class="normal-heading" [style]="{'color':cardtext2clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr2,'font-family':fontclr}">GETster.Tech Pvt Ltd</span>
+          </div>
+          <div class="my-auto ml-2">
+            <mat-checkbox (change)="checkinstitute($event)" [checked]="institution==1?true:false"></mat-checkbox>
+          </div>
+        </div>
+
+        <div border_bottom class="h-[1px]  bg-black mt-2  "></div>
+
+        <div class="mt-2 flex items-center">
+          <div class="rounded-full bg-white text-center min-h-[33px] min-w-[35px]">
+            <mat-icon class="text-blue-500 mt-1">call</mat-icon>
+          </div>
+          <div class="rounded-2xl bg-white text-center  min-w-[60px]  py-1   ml-4 ">
+            <span class="normal-heading " [style]="{'color':cardtext3clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr3,'font-family':fontclr}">+91</span>
+          </div>
+          <div class="rounded-2xl bg-white text-center  py-2 ml-2 w-full ">
+            <span class="normal-heading" [style]="{'color':cardtext3clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr3,'font-family':fontclr}"
+              style="display: flex;align-items: center;justify-content: center;">1234567890</span>
+          </div>
+          <div class="ml-5">
+            <mat-checkbox (change)="checkmobile1($event)" [checked]="mobile11==1?true:false"></mat-checkbox>
+          </div>
+        </div>
+        <div class="mt-2 flex items-center">
+          <div class="rounded-full bg-white text-center min-h-[33px] min-w-[35px]">
+            <mat-icon class="text-[#FF0000]  mt-1 ">phone</mat-icon>
+          </div>
+          <div class="rounded-2xl bg-white text-center  min-w-[60px]  py-1 ml-4">
+            <span class="normal-heading" [style]="{'color':cardtext3clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr3,'font-family':fontclr}">+91</span>
+          </div>
+          <div class="rounded-2xl bg-white text-center  py-1 ml-2  w-full ">
+            <span class="normal-heading" [style]="{'color':cardtext3clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr3,'font-family':fontclr}">1234567890</span>
+          </div>
+          <div class="ml-5">
+            <mat-checkbox (change)="checkmobile2($event)" [checked]="mobile21==1?true:false"></mat-checkbox>
+          </div>
+        </div>
+        <div class="mt-2 flex items-center">
+          <div class="rounded-full bg-white text-center min-h-[33px] min-w-[35px]">
+            <mat-icon class="text-[#FF0000] mt-1">bloodtype</mat-icon>
+          </div>
+          <div class="rounded-2xl bg-white text-center py-1 ml-4  w-full">
+            <span class="normal-heading" [style]="{'color':cardtext3clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr3,'font-family':fontclr}">O
+              Positive</span>
+          </div>
+          <div class="ml-5">
+            <mat-checkbox (change)="checkbldg($event)" [checked]="bldg1==1?true:false"></mat-checkbox>
+          </div>
+        </div>
+        <div class=" mt-2 flex items-center">
+          <div class="rounded-full bg-white text-center min-h-[33px] min-w-[35px]">
+            <mat-icon class="text-blue-500 mt-1">email</mat-icon>
+          </div>
+          <div class="rounded-2xl bg-white text-center py-1 ml-4  w-full">
+            <span class="normal-heading" [style]="{'color':cardtext3clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr3,'font-family':fontclr}">vicky@gmail.com</span>
+          </div>
+          <div class="ml-5">
+            <mat-checkbox (change)="checkmail($event)" [checked]="email==1?true:false"></mat-checkbox>
+          </div>
+        </div>
+        <div class="mt-2 flex items-center">
+          <div class="rounded-full bg-white text-center min-h-[33px] min-w-[35px]">
+            <mat-icon class="text-blue-500 mt-1">place</mat-icon>
+          </div>
+          <div class="rounded-2xl bg-white text-center py-1 ml-4  w-full">
+            <span class="normal-heading" [style]="{'color':cardtext3clrchange,'font-family':fontfamilychange}"
+              [ngStyle]="{'color':textclr3,'font-family':fontclr}">#23,
+              Avenue, XYZ City,XYZ State, Country - 321455,#23, Avenue, XYZ City,XYZ State, Country - 321455,#23,
+              Avenue, XYZ City,XYZ State, Country - 321455</span>
+          </div>
+          <div class="ml-5">
+            <mat-checkbox (change)="checkaddress($event)" [checked]="add==1?true:false"></mat-checkbox>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <div border_right class="w-[1px] bg-gray-400 mt-4 mb-1"></div>
+
+  <!-- div2 -->
+  <div class="lt-xs:w-full gt-sm:w-1/2">
+  </div>
+</div>

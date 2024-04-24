@@ -1,0 +1,31 @@
+<section>
+  <div>
+    <div>
+      <mat-toolbar class="component--dialog-box__custom-toolbar">
+        <span class="text-sm font-[550]">Add Location </span>
+        <span class="example-spacer"></span>
+        <button mat-icon-button class="flex items-center justify-center w-[30px]">
+          <mat-icon (click)="onNoClick()">close</mat-icon>
+        </button>
+      </mat-toolbar>
+      <!-- Content -->
+      <section class="px-[10px] py-0 flex flex-col  overflow-hidden" mat-dialog-content>
+        <div class="p-2">
+          <div id="new_map"></div>
+        </div>
+      </section>
+
+    </div>
+
+    <div class=" mt-2 mb-4 flex flex-wrap flex-row-reverse">
+
+      <div class="mr-3">
+        <button class="primary-button" mat-raised-button (click)="addLocation()">Save</button>
+        <!-- <button class="primary-button" mat-raised-button (click)="addLocation()" mat-dialog-close>
+          Save
+        </button> -->
+      </div>
+    </div>
+  </div>
+
+</section>

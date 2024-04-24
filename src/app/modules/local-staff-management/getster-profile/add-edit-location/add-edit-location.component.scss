@@ -1,0 +1,33 @@
+#new_map {
+  height: 50vh;
+  width: calc(100% - 8px);
+  // @apply lt-sm:ml-[6px];
+  margin: auto;
+  border: 2px solid black;
+}
+
+#edit_map {
+  height: 50vh;
+  // width: 73.5vw;
+  // @apply border-inherit  lt-sm:ml-[6px] lt-sm:overflow-hidden;
+  width: calc(100% - 8px);
+  margin: auto;
+  border: 2px solid black;
+}
+
+// Dialog box toolbar
+.component--dialog-box__custom-toolbar {
+  &.mat-toolbar {
+    height: 27px;
+    background-color: #3366ff;
+    // border-radius: 4px;
+    padding: 0 0 0 12px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 550;
+
+    .example-spacer {
+      flex: 1 1 auto;
+    }
+  }
+}

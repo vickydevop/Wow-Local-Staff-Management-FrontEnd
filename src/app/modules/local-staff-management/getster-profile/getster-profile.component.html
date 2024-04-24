@@ -1,0 +1,278 @@
+<!-- <div class="component--mat-tab__custom-style">
+  <mat-tab-group dynamicHeight>
+    <mat-tab label="Access GETster Profile/Login Reset">
+      <app-getster-profile-login></app-getster-profile-login>
+    </mat-tab>
+    <mat-tab label=" Approve Profile Changes by GETster">
+      <app-approve-profile-changes-by-users></app-approve-profile-changes-by-users>
+    </mat-tab>
+    <mat-tab label="Approve User Profile / Login Reset">
+      <app-user-e-identity-card-eligibility></app-user-e-identity-card-eligibility>
+    </mat-tab>
+  </mat-tab-group>
+</div> -->
+
+<div class="component--mat-tab__custom-style lt-md:hidden" *ngIf="mobileQuery.matches==false" >
+  <div class="p-1">
+    <span class="primary-heading"
+      >Your WOW camp:<span class="ml-1 normal-heading">{{camp_site_name}}</span>
+    </span>
+  </div>
+  <mat-tab-group dynamicHeight (selectedTabChange)="tabChanged($event)">
+    <mat-tab label="Recruitment Instructions">
+      <div class="mt-2" *ngIf="tabIndex == 0">
+        <span class="primary-heading"
+          >Recruitment instructions / JOB Details:</span
+        >
+      </div>
+      <div>
+        <div class="normal-heading text-justify">
+          <span>1.</span>
+          <span
+            >Verify the genuineness of documents submitted for new recruits,
+            especially the Aadhar card.
+          </span>
+          <br />
+          <span>2.</span>
+          <span
+            >GETster Guides, WOW Coordinators should have reasonable
+            communication skills in English and the local language in order to
+            communicate with city-based English educational institutions.
+            GETster guides are to be trained with other experienced guides at
+            least for a minimum of 15 days. WOW Coordinators should be residing
+            within the customer areas which can be accessible to him/her. There
+            should be no overlap or crossover of customer areas of two adjacent
+            coordinators.</span
+          >
+          <br /><span>3.</span>
+          <span>Priority to be given to the recruitment of local staff.</span>
+          <br /><span>4.</span>
+          <span
+            >Accommodation can be provided for sorting / pick up laborers.</span
+          >
+          <br /><span>5.</span>
+          <span
+            >Ladies’ toilets cleaning and sorting work to be done by ladies.
+            Toilet cleaning is to be done only between 8:00 AM and 10:00 PM and
+            should be ready for the next batch of campers.
+          </span>
+          <br />
+          <span>6.</span>
+          <span
+            >Recruited staff should register through our website by choosing the
+            categories listed under your camp in relevant categories.
+          </span>
+          <br /><span>7.</span>
+          <span
+            >After registration, New GETsters has to be approved in the next
+            tab.
+          </span>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Approve New GETsters">
+      <app-new-getster
+        #unblocktable
+        [approve_table_ref]="approveTable"
+        [block_table_ref]="blockTable"
+        [auto_block_table1_ref]="unblockTable"
+        [getster_table_ref]="getsterprofiletable1"
+      ></app-new-getster>
+    </mat-tab>
+    <mat-tab label="Approved GETsters">
+      <app-existing-getster
+        #approveTable
+        [approved_table_ref]="blockTable"
+        [getsterprofile_table_ref]="getsterprofiletable1"
+      ></app-existing-getster>
+    </mat-tab>
+    <mat-tab label="Blocked GETsters">
+      <mat-tab-group>
+        <mat-tab label="Auto Block Due to Failed Login Attempts">
+          <app-auto-block
+            #unblockTable
+            [unblock_table_ref]="unblocktable"
+          ></app-auto-block>
+        </mat-tab>
+        <mat-tab label="Manual Block By Console Users">
+          <app-manual-block
+            #blockTable
+            [unblock_table_ref]="unblocktable"
+          ></app-manual-block>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-tab>
+    <mat-tab label="GETster Profile / Login / E Identity">
+      <mat-tab-group>
+        <mat-tab label="Access GETster Profile/Login Reset">
+          <app-getster-profile-login
+            #getsterprofiletable1
+            [getsterapprove_table_ref1]="getsterapprovetable"
+          ></app-getster-profile-login>
+        </mat-tab>
+        <mat-tab label="Approve Profile Changes by GETster">
+          <app-approve-profile-changes-by-users
+            #getsterapprovetable
+            [getsterprofile_table_ref1]="getsterprofiletable1"
+          ></app-approve-profile-changes-by-users>
+        </mat-tab>
+        <mat-tab label="GETster E Identity Card Eligibility">
+          <app-user-e-identity-card-eligibility
+          ></app-user-e-identity-card-eligibility>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<div class="gt-sm:hidden" *ngIf="mobileQuery.matches==true" >
+  <mat-toolbar id="mat-toolbar" style="background-color: #9a9a9a80">
+    <div class="mobile-view" style="color: #3366ff" [matMenuTriggerFor]="menu">
+      <mat-icon class="back-icon">menu_open</mat-icon>
+    </div>
+
+    <div class="app-name">
+      <span style="color: black" *ngIf="tabIndex == 0"
+      >Recruitment Instructions</span
+    >
+      <span style="color: black" *ngIf="tabIndex == 1"
+        >Approve New GETsters</span
+      >
+      <span style="color: black" *ngIf="tabIndex == 2">Approved GETsters</span>
+      <span style="color: black" *ngIf="tabIndex == 3"
+        >Auto Block Due to Failed Login Attempts</span
+      >
+      <span style="color: black" *ngIf="tabIndex == 4"
+        >Manual Block By Console Users</span
+      >
+      <span style="color: black" *ngIf="tabIndex == 5"
+        >Access GETster Profile/Login Reset</span
+      >
+      <span style="color: black" *ngIf="tabIndex == 6"
+        >Approve Profile Changes by GETster</span
+      >
+      <span style="color: black" *ngIf="tabIndex == 7"
+        >GETster E Identity Card Eligibility</span
+      >
+    </div>
+  </mat-toolbar>
+
+  <!-- <div *ngIf="tabIndex == 0">
+    <mat-tab label="Recruitment Instructions">
+      <div class="mt-2">
+        <span class="primary-heading"
+          >Recruitment instructions / JOB Details:</span
+        >
+      </div>
+      <div>
+        <div class="normal-heading text-justify">
+          <span>1.</span>
+          <span
+            >Verify the genuineness of documents submitted for new recruits,
+            especially the Aadhar card.
+          </span>
+          <br />
+          <span>2.</span>
+          <span
+            >GETster Guides, WOW Coordinators should have reasonable
+            communication skills in English and the local language in order to
+            communicate with city-based English educational institutions.
+            GETster guides are to be trained with other experienced guides at
+            least for a minimum of 15 days. WOW Coordinators should be residing
+            within the customer areas which can be accessible to him/her. There
+            should be no overlap or crossover of customer areas of two adjacent
+            coordinators.</span
+          >
+          <br /><span>3.</span>
+          <span>Priority to be given to the recruitment of local staff.</span>
+          <br /><span>4.</span>
+          <span
+            >Accommodation can be provided for sorting / pick up laborers.</span
+          >
+          <br /><span>5.</span>
+          <span
+            >Ladies’ toilets cleaning and sorting work to be done by ladies.
+            Toilet cleaning is to be done only between 8:00 AM and 10:00 PM and
+            should be ready for the next batch of campers.
+          </span>
+          <br />
+          <span>6.</span>
+          <span
+            >Recruited staff should register through our website by choosing the
+            categories listed under your camp in relevant categories.
+          </span>
+          <br /><span>7.</span>
+          <span
+            >After registration, New GETsters has to be approved in the next
+            tab.
+          </span>
+        </div>
+      </div>
+    </mat-tab>
+  </div> -->
+  <app-new-getster *ngIf="tabIndex == 1"></app-new-getster>
+  <app-existing-getster *ngIf="tabIndex == 2"></app-existing-getster>
+  <app-auto-block *ngIf="tabIndex == 3"></app-auto-block>
+  <app-manual-block *ngIf="tabIndex == 4"></app-manual-block>
+  <app-getster-profile-login *ngIf="tabIndex == 5"></app-getster-profile-login>
+  <app-approve-profile-changes-by-users *ngIf="tabIndex == 6"></app-approve-profile-changes-by-users>
+  <app-user-e-identity-card-eligibility *ngIf="tabIndex == 7"></app-user-e-identity-card-eligibility>
+</div>
+
+<!-- * Profile Mobile view -->
+<mat-menu #menu="matMenu" style="height: fit-content" [overlapTrigger]="false">
+  <!-- <button mat-menu-item (click)="tabIndex = 0">
+    <mat-icon>admin_panel_settings</mat-icon>
+    <span>Recruitment Instructions</span>
+  </button> -->
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="tabIndex = 1">
+    <!-- <mat-icon>admin_panel_settings</mat-icon> -->
+    <span>Approve New GETsters</span>
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="tabIndex = 2">
+    <!-- <mat-icon>admin_panel_settings</mat-icon> -->
+    <span>Approved GETsters</span>
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="tabIndex = 3">
+    <!-- <mat-icon>admin_panel_settings</mat-icon> -->
+    <span>Auto Block Due to Failed Login Attempts</span>
+  </button>
+  <button mat-menu-item (click)="tabIndex = 4">
+    <!-- <mat-icon>admin_panel_settings</mat-icon> -->
+    <span>Manual Block By Console Users</span>
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="tabIndex = 5">
+    <!-- <mat-icon>admin_panel_settings</mat-icon> -->
+    <span>Access GETster Profile/Login Reset</span>
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="tabIndex = 6">
+    <!-- <mat-icon>admin_panel_settings</mat-icon> -->
+    <span>Approve Profile Changes by GETster</span>
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="tabIndex = 7">
+    <!-- <mat-icon>admin_panel_settings</mat-icon> -->
+    <span>GETster E Identity Card Eligibility</span>
+  </button>
+  <mat-divider></mat-divider>
+</mat-menu>
+
+<!-- <mat-tab label="Access GETster Profile/Login Reset">
+  <mat-tab-group>
+    <mat-tab label="Approve Profile Changes by GETster">
+      <app-getster-profile-login #getsterprofiletable1></app-getster-profile-login>
+    </mat-tab>
+    <mat-tab label="Approve User Profile / Login Reset">
+      <app-approve-profile-changes-by-users
+        [getsterprofile_table_ref1]="getsterprofiletable1"></app-approve-profile-changes-by-users>
+    </mat-tab>
+    <mat-tab label="GETster E Identity Card Eligibility">
+      <app-user-e-identity-card-eligibility></app-user-e-identity-card-eligibility>
+    </mat-tab>
+  </mat-tab-group>
+</mat-tab> -->

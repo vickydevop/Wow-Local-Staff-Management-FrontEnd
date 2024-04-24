@@ -1,0 +1,128 @@
+<div class="bg-[#ABF942] h-[calc(691px_-_100px)] p-2">
+  <form [formGroup]="form" class="custom_text">
+    <div class="flex flex-col justify-around items-center h-full">
+      <div class="gt-sm:flex mt-[1%] lt-sm:mt-[0%] sm:mt-[1%] gap-2">
+        <div class="normal-heading mt-[4%]">Select Country:</div>
+
+        <div>
+          <mat-form-field
+            appearance="outline"
+            class="component--mat-form-field__custom-input w-full"
+          >
+            <input
+              type="text"
+              matInput
+              formControlName="country"
+              [matAutocomplete]="auto"
+            />
+
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option
+                *ngFor="let option of CountryfilteredOptions"
+                [value]="option.name"
+                 (onSelectionChange)="getval(option)"
+              >
+                {{ option.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="gt-sm:flex gap-1">
+        <div class="normal-heading">
+          You are assigned as a <br />
+          Manager to <span class="secondary-headings">getWOW.camp</span> site
+        </div>
+
+        <div>
+          <mat-form-field
+            appearance="outline"
+            class="component--mat-form-field__custom-input w-[80%]"
+          >
+
+                <mat-select formControlName="campName" name="item">
+                  <mat-option
+                   *ngFor="let item of campArray" [value]="item">
+                   {{item}}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="this.form.get('campName')!.hasError('required')"
+                  >Please select Camp Name.</mat-error
+                >
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="secondary-heading underline text-center">
+        Contact Corporate HR in case you have problem with this assignment
+      </div>
+
+      <div class="secondary-heading">
+        Face Recognition Login<span style="color: rgb(250, 0, 0)">*</span>
+      </div>
+
+      <div class="h-[250px] w-[250px]">
+        <img class="h-full w-full" src="assets/images/dummy.png" />
+      </div>
+
+      <div class="w-[75%] mt-2">
+        <mat-form-field
+          appearance="outline"
+          class="component--mat-form-field__custom-input w-full"
+        >
+          <mat-label>Password</mat-label>
+          <!-- <input type="text" matInput formControlName="getster_password" /> -->
+
+          <input
+            type="password"
+            matInput
+            value=""
+            formControlName="password"
+            [type]="hide ? 'text' : 'password'"
+            required
+          />
+          <icon
+            style="cursor: pointer"
+            mat-icon-button
+            matSuffix
+            (click)="hide = !hide"
+          >
+            <mat-icon>{{ hide ? "visibility" : "visibility_off" }}</mat-icon>
+          </icon>
+        </mat-form-field>
+      </div>
+
+      <!-- <mat-form-field
+      appearance="outline"
+      class="w-full component--mat-form-field__custom-input"
+    >
+      <mat-label>Password</mat-label>
+      <mat-icon matPrefix class="icon-prefix-padding">lock_outline</mat-icon>
+    </mat-form-field> -->
+
+      <div>
+        <button
+          mat-raised-button
+          class="primary-button"
+          [disabled]="!form.valid"
+          (click)="onsubmit()"
+        >
+          LOG IN
+        </button>
+      </div>
+
+      <div class="secondary-heading text-center">
+        In case you forgot the password, Please contact your
+        <span
+          class="primary-heading cursor-pointer"
+          (click)="onGetAppAdministratorList()"
+          >APP Administrator</span
+        >
+        to SMS a password reset link to your registered mobile number by
+        accessing your Profile.
+      </div>
+    </div>
+  </form>
+</div>
